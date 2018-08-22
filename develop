@@ -1,0 +1,6 @@
+echo "Running rm ./schema/bindata.go"
+rm ./schema/bindata.go
+echo "Running go generate ./schema"
+go generate ./schema
+echo "Running realize run"
+realize run
