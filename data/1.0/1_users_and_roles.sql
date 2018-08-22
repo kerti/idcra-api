@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `users`
 (
   `id` CHAR(36) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
+  `password` BLOB NOT NULL,
   `ip_address` VARCHAR(45),
   `created_at` TIMESTAMP DEFAULT NOW(),
   PRIMARY KEY (`id`),
@@ -30,3 +31,5 @@ CREATE TABLE IF NOT EXISTS `rel_users_roles` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
+
+INSERT INTO `roles` VALUES('0780e271-5f62-405e-a700-f93d65b70dd4', 'ADMIN');
