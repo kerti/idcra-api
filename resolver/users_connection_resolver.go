@@ -1,8 +1,8 @@
 package resolver
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/model"
-	"github.com/OscarYuen/go-graphql-starter/service"
+	"github.com/kerti/idcra-api/model"
+	"github.com/kerti/idcra-api/service"
 )
 
 type usersConnectionResolver struct {

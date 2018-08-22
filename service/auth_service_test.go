@@ -1,8 +1,8 @@
 package service
 
 import (
-	gcontext "github.com/OscarYuen/go-graphql-starter/context"
-	"github.com/OscarYuen/go-graphql-starter/model"
+	gcontext "github.com/kerti/idcra-api/context"
+	"github.com/kerti/idcra-api/model"
 	"testing"
 )
 

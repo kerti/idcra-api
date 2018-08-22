@@ -2,9 +2,9 @@ package resolver
 
 import (
 	"errors"
-	gcontext "github.com/OscarYuen/go-graphql-starter/context"
-	"github.com/OscarYuen/go-graphql-starter/loader"
-	"github.com/OscarYuen/go-graphql-starter/service"
+	gcontext "github.com/kerti/idcra-api/context"
+	"github.com/kerti/idcra-api/loader"
+	"github.com/kerti/idcra-api/service"
 	"github.com/op/go-logging"
 	"golang.org/x/net/context"
 )

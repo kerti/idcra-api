@@ -3,9 +3,9 @@ package service
 import (
 	"database/sql"
 	"errors"
-	"github.com/OscarYuen/go-graphql-starter/context"
-	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/jmoiron/sqlx"
+	"github.com/kerti/idcra-api/context"
+	"github.com/kerti/idcra-api/model"
 	"github.com/op/go-logging"
 	"github.com/rs/xid"
 )

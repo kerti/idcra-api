@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/context"
+	"github.com/kerti/idcra-api/context"
 	"github.com/op/go-logging"
 	"os"
 )

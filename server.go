@@ -1,16 +1,16 @@
 package main
 
 import (
-	gcontext "github.com/OscarYuen/go-graphql-starter/context"
-	h "github.com/OscarYuen/go-graphql-starter/handler"
-	"github.com/OscarYuen/go-graphql-starter/resolver"
-	"github.com/OscarYuen/go-graphql-starter/schema"
-	"github.com/OscarYuen/go-graphql-starter/service"
+	gcontext "github.com/kerti/idcra-api/context"
+	h "github.com/kerti/idcra-api/handler"
+	"github.com/kerti/idcra-api/resolver"
+	"github.com/kerti/idcra-api/schema"
+	"github.com/kerti/idcra-api/service"
 	"log"
 	"net/http"
 
-	"github.com/OscarYuen/go-graphql-starter/loader"
 	graphql "github.com/graph-gophers/graphql-go"
+	"github.com/kerti/idcra-api/loader"
 	"golang.org/x/net/context"
 )
 

@@ -1,8 +1,8 @@
 package resolver
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/graph-gophers/graphql-go"
+	"github.com/kerti/idcra-api/model"
 )
 
 type roleResolver struct {
