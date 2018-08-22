@@ -3,11 +3,12 @@ package service
 import (
 	"database/sql"
 	"errors"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/kerti/idcra-api/context"
 	"github.com/kerti/idcra-api/model"
 	"github.com/op/go-logging"
-	"github.com/rs/xid"
+	uuid "github.com/satori/go.uuid"
 )
 
 const (
@@ -27,7 +28,7 @@ func NewUserService(db *sqlx.DB, roleService *RoleService, log *logging.Logger) 
 func (u *UserService) FindByEmail(email string) (*model.User, error) {
 	user := &model.User{}
 
-	userSQL := `SELECT * FROM users WHERE email = $1`
+	userSQL := `SELECT * FROM users WHERE email = ?`
 	udb := u.db.Unsafe()
 	row := udb.QueryRowx(userSQL, email)
 	err := row.StructScan(user)
@@ -49,8 +50,8 @@ func (u *UserService) FindByEmail(email string) (*model.User, error) {
 }
 
 func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
-	userId := xid.New()
-	user.ID = userId.String()
+	userID := uuid.NewV4()
+	user.ID = userID.String()
 	userSQL := `INSERT INTO users (id, email, password, ip_address) VALUES (:id, :email, :password, :ip_address)`
 	user.HashedPassword()
 	_, err := u.db.NamedExec(userSQL, user)
@@ -70,7 +71,7 @@ func (u *UserService) List(first *int32, after *string) ([]*model.User, error) {
 	}
 
 	if after != nil {
-		userSQL := `SELECT * FROM users WHERE created_at < (SELECT created_at FROM users WHERE id = $1) ORDER BY created_at DESC LIMIT $2;`
+		userSQL := `SELECT * FROM users WHERE created_at < (SELECT created_at FROM users WHERE id = ?) ORDER BY created_at DESC LIMIT ?;`
 		decodedIndex, _ := DecodeCursor(after)
 		err := u.db.Select(&users, userSQL, decodedIndex, fetchSize)
 		if err != nil {
@@ -78,7 +79,7 @@ func (u *UserService) List(first *int32, after *string) ([]*model.User, error) {
 		}
 		return users, nil
 	}
-	userSQL := `SELECT * FROM users ORDER BY created_at DESC LIMIT $1;`
+	userSQL := `SELECT * FROM users ORDER BY created_at DESC LIMIT ?;`
 	err := u.db.Select(&users, userSQL, fetchSize)
 	if err != nil {
 		return nil, err

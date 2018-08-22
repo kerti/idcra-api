@@ -2,6 +2,7 @@ package service
 
 import (
 	"database/sql"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/kerti/idcra-api/model"
 	"github.com/op/go-logging"
@@ -22,7 +23,7 @@ func (r *RoleService) FindByUserId(userId *string) ([]*model.Role, error) {
 	roleSQL := `SELECT role.*
 	FROM roles role
 	INNER JOIN rel_users_roles ur ON role.id = ur.role_id
-	WHERE ur.user_id = $1 `
+	WHERE ur.user_id = ? `
 	err := r.db.Select(&roles, roleSQL, userId)
 	if err == sql.ErrNoRows {
 		return roles, nil
