@@ -1,12 +1,12 @@
-app-name = "go-graphql-starter"
+app-name = "idcra-api"
 version = 1.0
 
 [db]
 host = "localhost"
-port = "5432"
-user = "postgres"
-password = "123456"
-dbname = "postgres"
+port = "3306"
+user = "idcra"
+password = "1234567890"
+dbname = "idcra"
 
 [log]
 debug-mode = true
