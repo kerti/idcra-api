@@ -2,21 +2,25 @@ package context
 
 import (
 	"fmt"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 	"log"
 	"time"
+
+	// Blank import for MySQL
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 )
 
 func OpenDB(config *Config) (*sqlx.DB, error) {
 	log.Println("Database is connecting... ")
-	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", config.DBHost, config.DBPort, config.DBUser, config.DBPassword, config.DBName))
+	db, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", config.DBUser, config.DBPassword, config.DBHost, config.DBPort, config.DBName))
 
 	if err != nil {
+		log.Println("Error: " + err.Error())
 		panic(err.Error())
 	}
 
 	if err = db.Ping(); err != nil {
+		log.Println("Error: " + err.Error())
 		log.Println("Retry database connection in 5 seconds... ")
 		time.Sleep(time.Duration(5) * time.Second)
 		return OpenDB(config)
