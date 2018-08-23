@@ -2,16 +2,15 @@ package loader
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/kerti/idcra-api/model"
 	"github.com/kerti/idcra-api/service"
 	"golang.org/x/net/context"
 	"gopkg.in/nicksrandall/dataloader.v5"
-	"sync"
 )
 
-// FilmLoader contains the client required to load film resources.
-type userLoader struct {
-}
+type userLoader struct{}
 
 func newUserLoader() dataloader.BatchFunc {
 	return userLoader{}.loadBatch
