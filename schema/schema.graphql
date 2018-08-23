@@ -5,6 +5,10 @@ schema {
 type Query {
     user(email: String!): User
     users(first: Int,  after: String): UsersConnection!
+    school(id: String!): School
+    schools(first: Int, after: String): SchoolsConnection!
+    student(id: String!): Student
+    students(first: Int, after: String): StudentsConnection!
 }
 type Mutation {
     createUser(email: String!, password: String!): User

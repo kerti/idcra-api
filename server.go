@@ -1,13 +1,14 @@
 package main
 
 import (
+	"log"
+	"net/http"
+
 	gcontext "github.com/kerti/idcra-api/context"
 	h "github.com/kerti/idcra-api/handler"
 	"github.com/kerti/idcra-api/resolver"
 	"github.com/kerti/idcra-api/schema"
 	"github.com/kerti/idcra-api/service"
-	"log"
-	"net/http"
 
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/kerti/idcra-api/loader"
@@ -26,12 +27,17 @@ func main() {
 	roleService := service.NewRoleService(db, log)
 	userService := service.NewUserService(db, roleService, log)
 	authService := service.NewAuthService(config, log)
+	studentService := service.NewStudentService(db, log)
+	schoolService := service.NewSchoolService(db, studentService, log)
 
 	ctx = context.WithValue(ctx, "config", config)
 	ctx = context.WithValue(ctx, "log", log)
 	ctx = context.WithValue(ctx, "roleService", roleService)
 	ctx = context.WithValue(ctx, "userService", userService)
 	ctx = context.WithValue(ctx, "authService", authService)
+
+	ctx = context.WithValue(ctx, "studentService", studentService)
+	ctx = context.WithValue(ctx, "schoolService", schoolService)
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
 

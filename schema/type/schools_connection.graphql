@@ -1,0 +1,5 @@
+type SchoolsConnection {
+    totalCount: Int!
+    edges: [SchoolsEdge]
+    pageInfo: PageInfo!
+}

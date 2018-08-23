@@ -2,6 +2,7 @@ package loader
 
 import (
 	"fmt"
+
 	"golang.org/x/net/context"
 	"gopkg.in/nicksrandall/dataloader.v5"
 )
@@ -9,7 +10,9 @@ import (
 type key string
 
 const (
-	userLoaderKey key = "user"
+	userLoaderKey        key = "user"
+	schoolLoaderByIDKey  key = "schoolByID"
+	studentLoaderByIDKey key = "studentByID"
 )
 
 // Initialize a lookup map of context keys to batch functions.
@@ -21,7 +24,9 @@ const (
 func NewLoaderCollection() LoaderCollection {
 	return LoaderCollection{
 		dataloaderFuncMap: map[key]dataloader.BatchFunc{
-			userLoaderKey: newUserLoader(),
+			userLoaderKey:        newUserLoader(),
+			schoolLoaderByIDKey:  newSchoolLoaderByID(),
+			studentLoaderByIDKey: newStudentLoaderByID(),
 		},
 	}
 }
