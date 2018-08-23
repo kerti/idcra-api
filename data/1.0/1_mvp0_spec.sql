@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `ip_address` VARCHAR(45),
   `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `users_idx_1` (`email`)
+  UNIQUE INDEX `users_idx_1` (`email`),
+  INDEX `users_idx_2` (`created_at`)
 ) ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
 -- ----------------------------------------------------------------------------
@@ -57,8 +58,10 @@ CREATE TABLE IF NOT EXISTS `rel_users_roles` (
 CREATE TABLE IF NOT EXISTS `schools` (
   `id` CHAR(36) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `schools_idx_1` (`name`)
+  UNIQUE INDEX `schools_idx_1` (`name`),
+  INDEX `schools_idx_2` (`created_at`)
 ) ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
 -- ----------------------------------------------------------------------------
@@ -69,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   `name` VARCHAR(255) NOT NULL,
   `date_of_birth` DATE NOT NULL,
   `school_id` CHAR(36) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `students_idx_1` (`name`, `school_id`, `date_of_birth`),
   CONSTRAINT `fk_students_schools` FOREIGN KEY (`school_id`)
@@ -83,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `diagnosis_and_actions` (
   `id` CHAR(36) NOT NULL,
   `diagnosis` VARCHAR(255) NOT NULL,
   `action` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `diagnosis_and_actions_idx_1` (`diagnosis`, `action`)
 ) ENGINE=InnoDB
@@ -90,8 +95,8 @@ CREATE TABLE IF NOT EXISTS `diagnosis_and_actions` (
 
 -- DiagnosisAndActions Data
 INSERT INTO `diagnosis_and_actions` (`id`, `diagnosis`, `action`) VALUES
-('4485a2cb-688e-4e0b-bdcf-bcc008c37a69', 'Pit Fissure Dalam', 'Fissure Sealant'),
-('469d07e4-d71a-4dcb-9932-c805aefff48f', 'Karies Superficial', 'ART');
+('4485a2cb-688e-4e0b-bdcf-bcc008c37a69', 'Pit Fissure Dalam', 'Fissure Sealant', NOW()),
+('469d07e4-d71a-4dcb-9932-c805aefff48f', 'Karies Superficial', 'ART', NOW());
 -- ----------------------------------------------------------------------------
 
 -- Surveys Table
@@ -123,9 +128,11 @@ CREATE TABLE IF NOT EXISTS `surveys` (
   `upper_m` INT,
   `upper_f` INT,
   `subjective_score` INT,
+  `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `survey_idx_1` (`student_id`, `date`),
   INDEX `survey_idx_2` (`subjective_score`),
+  INDEX `survey_idx_3` (`created_at`),
   CONSTRAINT `fk_surveys_students` FOREIGN KEY (`student_id`)
     REFERENCES `students`(`id`)
     ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -142,7 +149,9 @@ CREATE TABLE IF NOT EXISTS `cases` (
   `survey_id` CHAR(36) NOT NULL,
   `tooth_number` INT NOT NULL,
   `diagnosis_and_action_id` CHAR(36) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`),
+  INDEX `cases_idx_1` (`created_at`),
   CONSTRAINT `fk_cases_surveys` FOREIGN KEY (`survey_id`)
     REFERENCES `surveys`(`id`)
     ON DELETE NO ACTION ON UPDATE NO ACTION,
