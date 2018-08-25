@@ -2,10 +2,10 @@ app-name = "idcra-api"
 version = 1.0
 
 [db]
-host = "localhost"
-port = "3306"
+host = "idcra.radityakertiyasa.com"
+port = "55584"
 user = "idcra"
-password = "1234567890"
+password = "SrArL2ddfwMC6uGP"
 dbname = "idcra"
 
 [log]

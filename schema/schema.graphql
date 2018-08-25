@@ -9,6 +9,8 @@ type Query {
     schools(first: Int, after: String): SchoolsConnection!
     student(id: String!): Student
     students(first: Int, after: String): StudentsConnection!
+    diagnosisAndAction(id: String!): DiagnosisAndAction
+    diagnosisAndActions(first: Int, after: String): DiagnosisAndActionsConnection!
 }
 type Mutation {
     createUser(email: String!, password: String!): User

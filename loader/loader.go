@@ -10,9 +10,10 @@ import (
 type key string
 
 const (
-	userLoaderKey        key = "user"
-	schoolLoaderByIDKey  key = "schoolByID"
-	studentLoaderByIDKey key = "studentByID"
+	userLoaderKey                   key = "user"
+	schoolLoaderByIDKey             key = "schoolByID"
+	studentLoaderByIDKey            key = "studentByID"
+	diagnosisAndActionLoaderByIDKey key = "diagnosisAndActionByID"
 )
 
 // Initialize a lookup map of context keys to batch functions.
@@ -24,9 +25,10 @@ const (
 func NewLoaderCollection() LoaderCollection {
 	return LoaderCollection{
 		dataloaderFuncMap: map[key]dataloader.BatchFunc{
-			userLoaderKey:        newUserLoader(),
-			schoolLoaderByIDKey:  newSchoolLoaderByID(),
-			studentLoaderByIDKey: newStudentLoaderByID(),
+			userLoaderKey:                   newUserLoader(),
+			schoolLoaderByIDKey:             newSchoolLoaderByID(),
+			studentLoaderByIDKey:            newStudentLoaderByID(),
+			diagnosisAndActionLoaderByIDKey: newDiagnosisAndActionLoaderByID(),
 		},
 	}
 }

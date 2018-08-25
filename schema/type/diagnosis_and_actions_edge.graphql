@@ -1,0 +1,4 @@
+type DiagnosisAndActionsEdge {
+    cursor: ID!
+    node: DiagnosisAndAction
+}

@@ -1,0 +1,5 @@
+type DiagnosisAndActionsConnection {
+    totalCount: Int!
+    edges: [DiagnosisAndActionsEdge]
+    pageInfo: PageInfo!
+}

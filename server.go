@@ -29,6 +29,7 @@ func main() {
 	authService := service.NewAuthService(config, log)
 	studentService := service.NewStudentService(db, log)
 	schoolService := service.NewSchoolService(db, studentService, log)
+	diagnosisAndActionService := service.NewDiagnosisAndActionService(db, log)
 
 	ctx = context.WithValue(ctx, "config", config)
 	ctx = context.WithValue(ctx, "log", log)
@@ -38,6 +39,7 @@ func main() {
 
 	ctx = context.WithValue(ctx, "studentService", studentService)
 	ctx = context.WithValue(ctx, "schoolService", schoolService)
+	ctx = context.WithValue(ctx, "diagnosisAndActionService", diagnosisAndActionService)
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
 
