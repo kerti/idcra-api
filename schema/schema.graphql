@@ -11,6 +11,8 @@ type Query {
     students(first: Int, after: String): StudentsConnection!
     diagnosisAndAction(id: String!): DiagnosisAndAction
     diagnosisAndActions(first: Int, after: String): DiagnosisAndActionsConnection!
+    survey(id: String!): Survey
+    case(id: String!): Case
 }
 type Mutation {
     createUser(email: String!, password: String!): User

@@ -14,6 +14,8 @@ const (
 	schoolLoaderByIDKey             key = "schoolByID"
 	studentLoaderByIDKey            key = "studentByID"
 	diagnosisAndActionLoaderByIDKey key = "diagnosisAndActionByID"
+	caseLoaderByIDKey               key = "caseByID"
+	surveyLoaderByIDKey             key = "surveyByID"
 )
 
 // Initialize a lookup map of context keys to batch functions.
@@ -29,6 +31,8 @@ func NewLoaderCollection() LoaderCollection {
 			schoolLoaderByIDKey:             newSchoolLoaderByID(),
 			studentLoaderByIDKey:            newStudentLoaderByID(),
 			diagnosisAndActionLoaderByIDKey: newDiagnosisAndActionLoaderByID(),
+			caseLoaderByIDKey:               newCaseLoaderByID(),
+			surveyLoaderByIDKey:             newSurveyLoaderByID(),
 		},
 	}
 }
