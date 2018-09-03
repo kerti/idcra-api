@@ -53,11 +53,15 @@ func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
 	userID := uuid.NewV4()
 	user.ID = userID.String()
 	userSQL := `INSERT INTO users (id, email, password, ip_address) VALUES (:id, :email, :password, :ip_address)`
-	user.HashedPassword()
-	_, err := u.db.NamedExec(userSQL, user)
-	if err != nil {
+
+	if err := user.HashedPassword(); err != nil {
 		return nil, err
 	}
+
+	if _, err := u.db.NamedExec(userSQL, user); err != nil {
+		return nil, err
+	}
+
 	return user, nil
 }
 

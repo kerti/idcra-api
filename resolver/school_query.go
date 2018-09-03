@@ -23,6 +23,7 @@ func (r *Resolver) School(ctx context.Context, args struct {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
 	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved school by user_id[%s] : %v", *userID, *school)
 
 	return &schoolResolver{school}, nil
@@ -38,14 +39,24 @@ func (r *Resolver) Schools(ctx context.Context, args struct {
 	userID := ctx.Value("user_id").(*string)
 
 	schools, err := ctx.Value("schoolService").(*service.SchoolService).List(args.First, args.After)
+	if err != nil {
+		return nil, err
+	}
+
 	count, err := ctx.Value("schoolService").(*service.SchoolService).Count()
+	if err != nil {
+		return nil, err
+	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved schools by user_id[%s] :", *userID)
 	config := ctx.Value("config").(*gcontext.Config)
+
 	if config.DebugMode {
 		for _, school := range schools {
 			ctx.Value("log").(*logging.Logger).Debugf("%v", *school)
 		}
 	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved total schools count by user_id[%s] : %v", *userID, count)
 	if err != nil {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)

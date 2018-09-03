@@ -4,15 +4,16 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"log"
+	"net"
+	"net/http"
+	"strings"
+
 	jwt "github.com/dgrijalva/jwt-go"
 	gcontext "github.com/kerti/idcra-api/context"
 	"github.com/kerti/idcra-api/model"
 	"github.com/kerti/idcra-api/service"
 	"golang.org/x/net/context"
-	"log"
-	"net"
-	"net/http"
-	"strings"
 )
 
 func Authenticate(h http.Handler) http.Handler {
@@ -103,7 +104,9 @@ func Login() http.Handler {
 func writeResponse(w http.ResponseWriter, response interface{}, code int) {
 	jsonResponse, _ := json.Marshal(response)
 	w.WriteHeader(code)
-	w.Write(jsonResponse)
+	if _, err := w.Write(jsonResponse); err != nil {
+		log.Println(err)
+	}
 }
 
 func validateBasicAuthHeader(r *http.Request) (*model.UserCredentials, error) {

@@ -45,7 +45,7 @@ func main() {
 
 	http.Handle("/login", h.AddContext(ctx, h.Login()))
 
-	loggerHandler := &h.LoggerHandler{config.DebugMode}
+	loggerHandler := &h.LoggerHandler{DebugMode: config.DebugMode}
 	http.Handle("/query", h.AddContext(ctx, loggerHandler.Logging(h.Authenticate(&h.GraphQL{Schema: graphqlSchema, Loaders: loader.NewLoaderCollection()}))))
 
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

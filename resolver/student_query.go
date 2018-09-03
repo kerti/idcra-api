@@ -23,6 +23,7 @@ func (r *Resolver) Student(ctx context.Context, args struct {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
 	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved student by user_id[%s] : %v", *userID, *student)
 
 	return &studentResolver{student}, nil
@@ -38,14 +39,24 @@ func (r *Resolver) Students(ctx context.Context, args struct {
 	userID := ctx.Value("user_id").(*string)
 
 	students, err := ctx.Value("studentService").(*service.StudentService).List(args.First, args.After)
+	if err != nil {
+		return nil, err
+	}
+
 	count, err := ctx.Value("studentService").(*service.StudentService).Count()
+	if err != nil {
+		return nil, err
+	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved students by user_id[%s] :", *userID)
 	config := ctx.Value("config").(*gcontext.Config)
+
 	if config.DebugMode {
 		for _, student := range students {
 			ctx.Value("log").(*logging.Logger).Debugf("%v", *student)
 		}
 	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved total students count by user_id[%s] : %v", *userID, count)
 	if err != nil {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)

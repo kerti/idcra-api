@@ -2,9 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
+	"net/http"
+
 	"github.com/graph-gophers/graphql-go"
 	"github.com/kerti/idcra-api/loader"
-	"net/http"
 )
 
 type GraphQL struct {
@@ -32,5 +34,7 @@ func (h *GraphQL) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(responseJSON)
+	if _, err := w.Write(responseJSON); err != nil {
+		log.Println(err)
+	}
 }

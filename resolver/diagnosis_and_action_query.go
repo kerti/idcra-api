@@ -23,6 +23,7 @@ func (r *Resolver) DiagnosisAndAction(ctx context.Context, args struct {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
 	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved diagnosis and action by user_id[%s] : %v", *userID, *diagnosisAndAction)
 
 	return &diagnosisAndActionResolver{diagnosisAndAction}, nil
@@ -38,15 +39,26 @@ func (r *Resolver) DiagnosisAndActions(ctx context.Context, args struct {
 	userID := ctx.Value("user_id").(*string)
 
 	diagnosisAndActions, err := ctx.Value("diagnosisAndActionService").(*service.DiagnosisAndActionService).List(args.First, args.After)
+	if err != nil {
+		return nil, err
+	}
+
 	count, err := ctx.Value("diagnosisAndActionService").(*service.DiagnosisAndActionService).Count()
+	if err != nil {
+		return nil, err
+	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved diagnosisAndActions by user_id[%s] :", *userID)
 	config := ctx.Value("config").(*gcontext.Config)
+
 	if config.DebugMode {
 		for _, diagnosisAndAction := range diagnosisAndActions {
 			ctx.Value("log").(*logging.Logger).Debugf("%v", *diagnosisAndAction)
 		}
+
 	}
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved total diagnosisAndActions count by user_id[%s] : %v", *userID, count)
+
 	if err != nil {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
