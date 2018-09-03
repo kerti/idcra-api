@@ -2,6 +2,7 @@ package resolver
 
 import (
 	"errors"
+
 	gcontext "github.com/kerti/idcra-api/context"
 	"github.com/kerti/idcra-api/loader"
 	"github.com/kerti/idcra-api/service"
@@ -20,7 +21,9 @@ func (r *Resolver) User(ctx context.Context, args struct {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
 	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved user by user_id[%s] : %v", *userId, *user)
+
 	return &userResolver{user}, nil
 }
 
@@ -34,18 +37,29 @@ func (r *Resolver) Users(ctx context.Context, args struct {
 	userId := ctx.Value("user_id").(*string)
 
 	users, err := ctx.Value("userService").(*service.UserService).List(args.First, args.After)
+	if err != nil {
+		return nil, err
+	}
+
 	count, err := ctx.Value("userService").(*service.UserService).Count()
+	if err != nil {
+		return nil, err
+	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved users by user_id[%s] :", *userId)
 	config := ctx.Value("config").(*gcontext.Config)
+
 	if config.DebugMode {
 		for _, user := range users {
 			ctx.Value("log").(*logging.Logger).Debugf("%v", *user)
 		}
 	}
+
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved total users count by user_id[%s] : %v", *userId, count)
 	if err != nil {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
 	}
+
 	return &usersConnectionResolver{users: users, totalCount: count, from: &(users[0].ID), to: &(users[len(users)-1].ID)}, nil
 }
