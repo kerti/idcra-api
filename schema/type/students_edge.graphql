@@ -1,0 +1,4 @@
+type StudentsEdge {
+    cursor: ID!
+    node: Student
+}

@@ -1,0 +1,6 @@
+type School {
+    id: ID!
+    name: String
+    createdAt: Time
+    students: [Student]
+}

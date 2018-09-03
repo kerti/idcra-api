@@ -1,0 +1,6 @@
+type DiagnosisAndAction {
+    id: ID!
+    diagnosis: String
+    action: String
+    createdAt: Time
+}
