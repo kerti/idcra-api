@@ -1,9 +1,13 @@
-# idcra-api
-IDCRA API Codebase
-
-## Go Graphql Starter  
 [![GitHub license](https://img.shields.io/github/license/kerti/idcra-api.svg)](https://github.com/kerti/idcra-api/blob/master/LICENSE)
+[![GolangCI](https://golangci.com/badges/github.com/kerti/idcra-api.svg)](https://golangci.com/r/github.com/kerti/idcra-api)
 
+# idcra-api
+
+This is the codebase for Indonesia Digital Caries Risk Assessment API, or IDCRA API for short. It is based on Oscar Yuen's starter pack and provides GraphQL endpoints for the frontend.
+
+# Original Readme
+
+## Go Graphql Starter
 
 This project aims to use [graph-gophers/graphql-go](https://github.com/graph-gophers/graphql-go) to build a starter web application. This project has already been used as backend application in production.
 
