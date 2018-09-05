@@ -2,6 +2,7 @@ schema {
     query: Query
     mutation: Mutation
 }
+
 type Query {
     user(email: String!): User
     users(first: Int,  after: String): UsersConnection!
@@ -14,6 +15,9 @@ type Query {
     survey(id: String!): Survey
     case(id: String!): Case
 }
+
 type Mutation {
     createUser(email: String!, password: String!): User
+    createSchool(name: String!): School
+    createStudent(name: String!, dateOfBirth: String!, schoolID: String!): Student 
 }
