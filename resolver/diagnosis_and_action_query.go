@@ -64,5 +64,8 @@ func (r *Resolver) DiagnosisAndActions(ctx context.Context, args struct {
 		return nil, err
 	}
 
-	return &diagnosisAndActionsConnectionResolver{diagnosisAndActions: diagnosisAndActions, totalCount: count, from: &(diagnosisAndActions[0].ID), to: &(diagnosisAndActions[len(diagnosisAndActions)-1].ID)}, nil
+	if len(diagnosisAndActions) > 0 {
+		return &diagnosisAndActionsConnectionResolver{diagnosisAndActions: diagnosisAndActions, totalCount: count, from: &(diagnosisAndActions[0].ID), to: &(diagnosisAndActions[len(diagnosisAndActions)-1].ID)}, nil
+	}
+	return &diagnosisAndActionsConnectionResolver{diagnosisAndActions: diagnosisAndActions, totalCount: count, from: nil, to: nil}, nil
 }
