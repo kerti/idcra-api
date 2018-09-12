@@ -1,0 +1,4 @@
+input CaseInput {
+    toothNumber: Int
+    diagnosisAndActionId: String
+}
