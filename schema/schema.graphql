@@ -19,5 +19,6 @@ type Query {
 type Mutation {
     createUser(email: String!, password: String!): User
     createSchool(name: String!): School
-    createStudent(name: String!, dateOfBirth: String!, schoolID: String!): Student 
+    createStudent(name: String!, dateOfBirth: String!, schoolID: String!): Student
+    createSurvey(survey: SurveyInput!): Survey!
 }
