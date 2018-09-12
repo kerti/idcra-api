@@ -6,7 +6,7 @@ schema {
 type Query {
     user(email: String!): User
     users(first: Int,  after: String): UsersConnection!
-    school(id: String!): School
+    school(id: String!, studentName: String): School
     schools(first: Int, after: String): SchoolsConnection!
     student(id: String!): Student
     students(first: Int, after: String): StudentsConnection!
