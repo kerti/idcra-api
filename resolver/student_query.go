@@ -63,5 +63,8 @@ func (r *Resolver) Students(ctx context.Context, args struct {
 		return nil, err
 	}
 
-	return &studentsConnectionResolver{students: students, totalCount: count, from: &(students[0].ID), to: &(students[len(students)-1].ID)}, nil
+	if len(students) > 0 {
+		return &studentsConnectionResolver{students: students, totalCount: count, from: &(students[0].ID), to: &(students[len(students)-1].ID)}, nil
+	}
+	return &studentsConnectionResolver{students: students, totalCount: count, from: nil, to: nil}, nil
 }

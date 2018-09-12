@@ -2,6 +2,7 @@ package service
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/kerti/idcra-api/model"
@@ -36,14 +37,16 @@ func (s *StudentService) FindByID(id string) (*model.Student, error) {
 	return student, nil
 }
 
-func (s *StudentService) FindBySchoolID(schoolID *string) ([]*model.Student, error) {
-	students := make([]*model.Student, 0)
-	studentSQL := `SELECT * FROM students WHERE school_id = ? ORDER BY created_at DESC;`
-	err := s.db.Select(&students, studentSQL, schoolID)
-	if err != nil {
-		return nil, err
+func (s *StudentService) FindBySchoolID(schoolID *string, keyword *string) (students []*model.Student, err error) {
+	if keyword != nil {
+		strKeyword := fmt.Sprintf("%s%s%s", "%", *keyword, "%")
+		studentSQL := `SELECT * FROM students WHERE school_id = ? AND name LIKE ? ORDER BY name ASC;`
+		err = s.db.Select(&students, studentSQL, schoolID, strKeyword)
+	} else {
+		studentSQL := `SELECT * FROM students WHERE school_id = ? ORDER BY name ASC;`
+		err = s.db.Select(&students, studentSQL, schoolID)
 	}
-	return students, nil
+	return students, err
 }
 
 func (s *StudentService) CreateStudent(student *model.Student) (*model.Student, error) {
@@ -67,7 +70,7 @@ func (s *StudentService) List(first *int32, after *string) ([]*model.Student, er
 	}
 
 	if after != nil {
-		studentSQL := `SELECT * FROM students WHERE created_at < (SELECT created_at FROM students WHERE id = ?) ORDER BY created_at DESC LIMIT ?;`
+		studentSQL := `SELECT * FROM students WHERE name > (SELECT name FROM students WHERE id = ?) ORDER BY name ASC LIMIT ?;`
 		decodedIndex, _ := DecodeCursor(after)
 		err := s.db.Select(&students, studentSQL, decodedIndex, fetchSize)
 		if err != nil {
@@ -75,7 +78,7 @@ func (s *StudentService) List(first *int32, after *string) ([]*model.Student, er
 		}
 		return students, nil
 	}
-	studentSQL := `SELECT * FROM students ORDER BY created_at DESC LIMIT ?;`
+	studentSQL := `SELECT * FROM students ORDER BY name ASC LIMIT ?;`
 	err := s.db.Select(&students, studentSQL, fetchSize)
 	if err != nil {
 		return nil, err

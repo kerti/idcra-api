@@ -11,7 +11,8 @@ import (
 )
 
 func (r *Resolver) School(ctx context.Context, args struct {
-	ID string
+	ID          string
+	StudentName *string
 }) (*schoolResolver, error) {
 	if isAuthorized := ctx.Value("is_authorized").(bool); !isAuthorized {
 		return nil, errors.New(gcontext.CredentialsError)
@@ -23,6 +24,15 @@ func (r *Resolver) School(ctx context.Context, args struct {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
 	}
+
+	students, err := ctx.Value("studentService").(*service.StudentService).FindBySchoolID(&school.ID, args.StudentName)
+	if err != nil {
+		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
+		return nil, err
+	}
+
+	school.Students = students
+	ctx.Value("log").(*logging.Logger).Debugf("Retrieved students by user_id[%s] : %v", *userID, *school)
 
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved school by user_id[%s] : %v", *userID, *school)
 
@@ -63,5 +73,8 @@ func (r *Resolver) Schools(ctx context.Context, args struct {
 		return nil, err
 	}
 
-	return &schoolsConnectionResolver{schools: schools, totalCount: count, from: &(schools[0].ID), to: &(schools[len(schools)-1].ID)}, nil
+	if len(schools) > 0 {
+		return &schoolsConnectionResolver{schools: schools, totalCount: count, from: &(schools[0].ID), to: &(schools[len(schools)-1].ID)}, nil
+	}
+	return &schoolsConnectionResolver{schools: schools, totalCount: count, from: nil, to: nil}, nil
 }

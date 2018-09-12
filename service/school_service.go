@@ -10,13 +10,12 @@ import (
 )
 
 type SchoolService struct {
-	db             *sqlx.DB
-	studentService *StudentService
-	log            *logging.Logger
+	db  *sqlx.DB
+	log *logging.Logger
 }
 
-func NewSchoolService(db *sqlx.DB, studentService *StudentService, log *logging.Logger) *SchoolService {
-	return &SchoolService{db: db, studentService: studentService, log: log}
+func NewSchoolService(db *sqlx.DB, log *logging.Logger) *SchoolService {
+	return &SchoolService{db: db, log: log}
 }
 
 func (s *SchoolService) FindByName(name string) (*model.School, error) {
@@ -33,13 +32,6 @@ func (s *SchoolService) FindByName(name string) (*model.School, error) {
 		s.log.Errorf("Error in retrieving school : %v", err)
 		return nil, err
 	}
-
-	students, err := s.studentService.FindBySchoolID(&school.ID)
-	if err != nil {
-		s.log.Errorf("Error in retrieving students : %v", err)
-		return nil, err
-	}
-	school.Students = students
 
 	return school, nil
 }
@@ -58,13 +50,6 @@ func (s *SchoolService) FindByID(id string) (*model.School, error) {
 		s.log.Errorf("Error in retrieving school : %v", err)
 		return nil, err
 	}
-
-	students, err := s.studentService.FindBySchoolID(&school.ID)
-	if err != nil {
-		s.log.Errorf("Error in retrieving students : %v", err)
-		return nil, err
-	}
-	school.Students = students
 
 	return school, nil
 }

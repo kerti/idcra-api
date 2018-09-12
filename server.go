@@ -28,7 +28,7 @@ func main() {
 	userService := service.NewUserService(db, roleService, log)
 	authService := service.NewAuthService(config, log)
 	studentService := service.NewStudentService(db, log)
-	schoolService := service.NewSchoolService(db, studentService, log)
+	schoolService := service.NewSchoolService(db, log)
 	diagnosisAndActionService := service.NewDiagnosisAndActionService(db, log)
 	caseService := service.NewCaseService(db, log)
 	surveyService := service.NewSurveyService(db, caseService, log)

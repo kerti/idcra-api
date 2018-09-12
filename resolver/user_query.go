@@ -61,5 +61,8 @@ func (r *Resolver) Users(ctx context.Context, args struct {
 		return nil, err
 	}
 
-	return &usersConnectionResolver{users: users, totalCount: count, from: &(users[0].ID), to: &(users[len(users)-1].ID)}, nil
+	if len(users) > 0 {
+		return &usersConnectionResolver{users: users, totalCount: count, from: &(users[0].ID), to: &(users[len(users)-1].ID)}, nil
+	}
+	return &usersConnectionResolver{users: users, totalCount: count, from: nil, to: nil}, nil
 }

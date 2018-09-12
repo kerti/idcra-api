@@ -1,6 +1,7 @@
 package resolver
 
 import (
+	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/kerti/idcra-api/model"
 	"github.com/kerti/idcra-api/service"
 )
@@ -28,9 +29,20 @@ func (r *schoolsConnectionResolver) Edges() *[]*schoolsEdgeResolver {
 }
 
 func (r *schoolsConnectionResolver) PageInfo() *pageInfoResolver {
+	var startCursor graphql.ID
+	var endCursor graphql.ID
+
+	if r.from != nil {
+		startCursor = service.EncodeCursor(r.from)
+	}
+
+	if r.to != nil {
+		endCursor = service.EncodeCursor(r.to)
+	}
+
 	return &pageInfoResolver{
-		startCursor: service.EncodeCursor(r.from),
-		endCursor:   service.EncodeCursor(r.to),
+		startCursor: &startCursor,
+		endCursor:   &endCursor,
 		hasNextPage: false,
 	}
 }
