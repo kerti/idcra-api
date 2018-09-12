@@ -6,7 +6,6 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/kerti/idcra-api/model"
 	"github.com/op/go-logging"
-	uuid "github.com/satori/go.uuid"
 )
 
 type SurveyService struct {
@@ -44,9 +43,7 @@ func (s *SurveyService) FindByID(id string) (*model.Survey, error) {
 	return survey, nil
 }
 
-func (s *SurveyService) CreateSurvey(survey *model.Survey) (*model.Survey, error) {
-	surveyID := uuid.NewV4()
-	survey.ID = surveyID.String()
+func (s *SurveyService) TransactionalCreateSurvey(survey *model.Survey) (*model.Survey, error) {
 	surveySQL := `
 		INSERT INTO surveys
 		(
@@ -62,10 +59,26 @@ func (s *SurveyService) CreateSurvey(survey *model.Survey) (*model.Survey, error
 			:lower_d, :lower_e, :lower_f, :upper_d, :upper_m, :upper_f,
 			:subjective_score, :created_at
 		)`
-	_, err := s.db.NamedExec(surveySQL, survey)
-	if err != nil {
-		return nil, err
-	}
+	caseFoundSQL := `
+		INSERT INTO cases
+		(id, survey_id, tooth_number, diagnosis_and_action_id, created_at)
+		VALUES
+		(:id, :survey_id, :tooth_number, :diagnosis_and_action_id, :created_at)`
 
-	return survey, nil
+	err := Transact(s.db, func(tx *sqlx.Tx) error {
+		// store survey
+		if _, err := tx.NamedExec(surveySQL, survey); err != nil {
+			return err
+		}
+
+		// store cases
+		for _, c := range survey.Cases {
+			if _, err := tx.NamedExec(caseFoundSQL, c); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+	return survey, err
 }
