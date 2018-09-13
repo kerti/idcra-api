@@ -34,6 +34,8 @@ func (h *GraphQL) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST OPTIONS")
 	if _, err := w.Write(responseJSON); err != nil {
 		log.Println(err)
 	}
