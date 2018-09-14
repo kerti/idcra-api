@@ -14,3 +14,6 @@ install:
   - cd ../../kerti/idcra-api
   - go generate ./schema
   - go get -v ./...
+
+script:
+  - go build server.go
