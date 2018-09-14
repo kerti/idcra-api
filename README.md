@@ -1,5 +1,6 @@
 [![GitHub license](https://img.shields.io/github/license/kerti/idcra-api.svg)](https://github.com/kerti/idcra-api/blob/master/LICENSE)
 [![GolangCI](https://golangci.com/badges/github.com/kerti/idcra-api.svg)](https://golangci.com/r/github.com/kerti/idcra-api)
+[![Build Status](https://travis-ci.org/kerti/idcra-api.svg?branch=master)](https://travis-ci.org/kerti/idcra-api)
 
 # idcra-api
 
