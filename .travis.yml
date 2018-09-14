@@ -1,8 +1,19 @@
 language: go
-
+sudo: false
 go:
+  - "1.2"
+  - "1.3"
+  - "1.4"
+  - "1.5"
+  - "1.6"
+  - "1.7"
+  - "1.8"
+  - "1.9"
+  - "1.10"
   - "1.11.x"
-
+before_install:
+  - go get github.com/mattn/goveralls
+  - go get golang.org/x/tools/cmd/cover
 install:
   - go get -u github.com/jteeuwen/go-bindata/...
   - cd ../..
@@ -13,7 +24,9 @@ install:
   - git checkout 879c5887cd475cd7864858769793b2ceb0d44feb
   - cd ../../kerti/idcra-api
   - go generate ./schema
-  - go get -v ./...
-
+  - go get -t -v ./...
 script:
   - go build server.go
+  - $HOME/gopath/bin/goveralls -service=travis-ci
+notifications:
+  email: false
