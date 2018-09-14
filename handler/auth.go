@@ -47,9 +47,17 @@ func Authenticate(h http.Handler) http.Handler {
 
 func Login() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
 		ctx := r.Context()
 		loginResponse := &model.LoginResponse{}
+
+		if r.Method == http.MethodOptions {
+			response := &model.Response{
+				Code: http.StatusOK,
+			}
+			loginResponse.Response = response
+			writeResponse(w, loginResponse, loginResponse.Code)
+			return
+		}
 
 		if r.Method != http.MethodPost {
 			response := &model.Response{
