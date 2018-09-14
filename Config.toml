@@ -2,10 +2,10 @@ app-name = "idcra-api"
 version = 1.0
 
 [db]
-host = "localhost"
-port = "3306"
+host = "idcra.radityakertiyasa.com"
+port = "55584"
 user = "idcra"
-password = "1234567890"
+password = "SrArL2ddfwMC6uGP"
 dbname = "idcra"
 
 [log]
@@ -17,3 +17,4 @@ log-format = "%{color}%{time:2006/01/02 15:04:05 -07:00 MST} [%{level:.6s}] %{sh
 jwt-secret = "1234"
 #jwt expired time in second
 jwt-expire-in = "40000s"
+ 
