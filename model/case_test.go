@@ -7,17 +7,16 @@ import (
 )
 
 var (
-	daID        *string
-	toothNumber *int32
-	surveyID    string
+	daID        = "fakeDiagnosisAndActionID"
+	toothNumber = int32(21)
+	surveyID    = "fakeSurveyID"
 )
 
-func init() {
-	daIDObj := "fakeDiagnosisAndActionID"
-	daID = &daIDObj
-	toothNumberObj := int32(21)
-	toothNumber = &toothNumberObj
-	surveyID = "fakeSurveyID"
+func getValidCaseInput() *CaseInput {
+	return &CaseInput{
+		DiagnosisAndActionID: &daID,
+		ToothNumber:          &toothNumber,
+	}
 }
 
 func TestCaseInput(t *testing.T) {
@@ -25,10 +24,7 @@ func TestCaseInput(t *testing.T) {
 	t.Run("Validation", func(t *testing.T) {
 
 		t.Run("NoErrors", func(t *testing.T) {
-			sut := CaseInput{
-				DiagnosisAndActionID: daID,
-				ToothNumber:          toothNumber,
-			}
+			sut := getValidCaseInput()
 
 			err := sut.Validate()
 
@@ -36,27 +32,23 @@ func TestCaseInput(t *testing.T) {
 		})
 
 		t.Run("NilDiagnosisAndActionID", func(t *testing.T) {
-			sut := CaseInput{
-				DiagnosisAndActionID: nil,
-				ToothNumber:          toothNumber,
-			}
+			sut := getValidCaseInput()
+			sut.DiagnosisAndActionID = nil
 
 			err := sut.Validate()
 
 			assert.NotNil(t, err)
-			assert.Equal(t, err.Error(), "diagnosis and action ID is required")
+			assert.Equal(t, "diagnosis and action ID is required", err.Error())
 		})
 
 		t.Run("NilToothNumber", func(t *testing.T) {
-			sut := CaseInput{
-				DiagnosisAndActionID: daID,
-				ToothNumber:          nil,
-			}
+			sut := getValidCaseInput()
+			sut.ToothNumber = nil
 
 			err := sut.Validate()
 
 			assert.NotNil(t, err)
-			assert.Equal(t, err.Error(), "tooth number is required")
+			assert.Equal(t, "tooth number is required", err.Error())
 		})
 
 	})
@@ -66,28 +58,23 @@ func TestCaseInput(t *testing.T) {
 func TestNewCaseFromInput(t *testing.T) {
 
 	t.Run("NoErrors", func(t *testing.T) {
-		input := CaseInput{
-			DiagnosisAndActionID: daID,
-			ToothNumber:          toothNumber,
-		}
+		input := getValidCaseInput()
 
-		c, err := NewCaseFromInput(input, surveyID)
+		c, err := NewCaseFromInput(*input, surveyID)
 
 		assert.Nil(t, err)
-		assert.Equal(t, len(c.ID), 36)
-		assert.Equal(t, c.ToothNumber, *toothNumber)
+		assert.Equal(t, 36, len(c.ID))
+		assert.Equal(t, toothNumber, c.ToothNumber)
 	})
 
 	t.Run("WithErrors", func(t *testing.T) {
-		input := CaseInput{
-			DiagnosisAndActionID: daID,
-			ToothNumber:          nil,
-		}
+		input := getValidCaseInput()
+		input.ToothNumber = nil
 
-		_, err := NewCaseFromInput(input, surveyID)
+		_, err := NewCaseFromInput(*input, surveyID)
 
 		assert.NotNil(t, err)
-		assert.Equal(t, err.Error(), "tooth number is required")
+		assert.Equal(t, "tooth number is required", err.Error())
 	})
 
 }
