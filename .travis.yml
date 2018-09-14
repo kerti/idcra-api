@@ -4,10 +4,10 @@ go:
   - "1.11.x"
 
 install:
-  - cd ..
-  - cd ..
+  - cd ../..
   - git clone https://github.com/satori/go.uuid.git
+  - cd satori/go.uuid
   - git checkout 879c5887cd475cd7864858769793b2ceb0d44feb
-  - cd kerti/idcra-api
+  - cd ../../kerti/idcra-api
   - go generate ./schema
   - go get -v ./...
