@@ -80,5 +80,8 @@ func (s *SurveyService) TransactionalCreateSurvey(survey *model.Survey) (*model.
 
 		return nil
 	})
-	return survey, err
+	if err != nil {
+		return nil, err
+	}
+	return s.FindByID(survey.ID)
 }

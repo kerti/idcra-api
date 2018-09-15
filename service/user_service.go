@@ -62,7 +62,7 @@ func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
 		return nil, err
 	}
 
-	return user, nil
+	return u.FindByEmail(user.Email)
 }
 
 func (u *UserService) List(first *int32, after *string) ([]*model.User, error) {
