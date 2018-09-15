@@ -62,7 +62,7 @@ func (s *SchoolService) CreateSchool(school *model.School) (*model.School, error
 	if err != nil {
 		return nil, err
 	}
-	return school, nil
+	return s.FindByID(school.ID)
 }
 
 func (s *SchoolService) List(first *int32, after *string) ([]*model.School, error) {

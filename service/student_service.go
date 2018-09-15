@@ -57,7 +57,7 @@ func (s *StudentService) CreateStudent(student *model.Student) (*model.Student, 
 	if err != nil {
 		return nil, err
 	}
-	return student, nil
+	return s.FindByID(student.ID)
 }
 
 func (s *StudentService) List(first *int32, after *string) ([]*model.Student, error) {
