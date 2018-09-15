@@ -60,7 +60,7 @@ func (s *StudentService) CreateStudent(student *model.Student) (*model.Student, 
 	return s.FindByID(student.ID)
 }
 
-func (s *StudentService) List(first *int32, after *string) ([]*model.Student, error) {
+func (s *StudentService) List(first *int32, after *string, schoolID *string, keyword *string) ([]*model.Student, error) {
 	students := make([]*model.Student, 0)
 	var fetchSize int32
 	if first == nil {
@@ -69,27 +69,48 @@ func (s *StudentService) List(first *int32, after *string) ([]*model.Student, er
 		fetchSize = *first
 	}
 
+	strSchoolID := "%"
+	if schoolID != nil {
+		strSchoolID = fmt.Sprintf("%s%s%s", "%", *schoolID, "%")
+	}
+
+	strKeyword := "%"
+	if keyword != nil {
+		strKeyword = fmt.Sprintf("%s%s%s", "%", *keyword, "%")
+	}
+
 	if after != nil {
-		studentSQL := `SELECT * FROM students WHERE name > (SELECT name FROM students WHERE id = ?) ORDER BY name ASC LIMIT ?;`
+		studentSQL := `SELECT * FROM students WHERE school_id LIKE ? AND name LIKE ? AND name > (SELECT name FROM students WHERE id = ?) ORDER BY name ASC LIMIT ?;`
 		decodedIndex, _ := DecodeCursor(after)
-		err := s.db.Select(&students, studentSQL, decodedIndex, fetchSize)
+		err := s.db.Select(&students, studentSQL, strSchoolID, strKeyword, decodedIndex, fetchSize)
 		if err != nil {
 			return nil, err
 		}
 		return students, nil
 	}
-	studentSQL := `SELECT * FROM students ORDER BY name ASC LIMIT ?;`
-	err := s.db.Select(&students, studentSQL, fetchSize)
+	studentSQL := `SELECT * FROM students WHERE school_id LIKE ? AND name LIKE ? ORDER BY name ASC LIMIT ?;`
+	err := s.db.Select(&students, studentSQL, strSchoolID, strKeyword, fetchSize)
 	if err != nil {
 		return nil, err
 	}
 	return students, nil
 }
 
-func (s *StudentService) Count() (int, error) {
+func (s *StudentService) Count(schoolID *string, keyword *string) (int, error) {
 	var count int
-	studentSQL := `SELECT COUNT(*) FROM students`
-	err := s.db.Get(&count, studentSQL)
+
+	strSchoolID := "%"
+	if schoolID != nil {
+		strSchoolID = fmt.Sprintf("%s%s%s", "%", *schoolID, "%")
+	}
+
+	strKeyword := "%"
+	if keyword != nil {
+		strKeyword = fmt.Sprintf("%s%s%s", "%", *keyword, "%")
+	}
+
+	studentSQL := `SELECT COUNT(*) FROM students WHERE school_id LIKE ? AND name LIKE ?`
+	err := s.db.Get(&count, studentSQL, strSchoolID, strKeyword)
 	if err != nil {
 		return 0, err
 	}
