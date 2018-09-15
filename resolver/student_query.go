@@ -30,20 +30,22 @@ func (r *Resolver) Student(ctx context.Context, args struct {
 }
 
 func (r *Resolver) Students(ctx context.Context, args struct {
-	First *int32
-	After *string
+	First    *int32
+	After    *string
+	SchoolID *string
+	Keyword  *string
 }) (*studentsConnectionResolver, error) {
 	if isAuthorized := ctx.Value("is_authorized").(bool); !isAuthorized {
 		return nil, errors.New(gcontext.CredentialsError)
 	}
 	userID := ctx.Value("user_id").(*string)
 
-	students, err := ctx.Value("studentService").(*service.StudentService).List(args.First, args.After)
+	students, err := ctx.Value("studentService").(*service.StudentService).List(args.First, args.After, args.SchoolID, args.Keyword)
 	if err != nil {
 		return nil, err
 	}
 
-	count, err := ctx.Value("studentService").(*service.StudentService).Count()
+	count, err := ctx.Value("studentService").(*service.StudentService).Count(args.SchoolID, args.Keyword)
 	if err != nil {
 		return nil, err
 	}

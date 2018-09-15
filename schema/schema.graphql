@@ -9,7 +9,7 @@ type Query {
     school(id: String!, studentName: String): School
     schools(first: Int, after: String): SchoolsConnection!
     student(id: String!): Student
-    students(first: Int, after: String): StudentsConnection!
+    students(first: Int, after: String, schoolID: String, keyword: String): StudentsConnection!
     diagnosisAndAction(id: String!): DiagnosisAndAction
     diagnosisAndActions(first: Int, after: String): DiagnosisAndActionsConnection!
     survey(id: String!): Survey
