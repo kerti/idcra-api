@@ -44,6 +44,7 @@ func (s *SurveyService) FindByID(id string) (*model.Survey, error) {
 }
 
 func (s *SurveyService) TransactionalCreateSurvey(survey *model.Survey) (*model.Survey, error) {
+	survey.CalculateScore()
 	surveySQL := `
 		INSERT INTO surveys
 		(

@@ -40,9 +40,39 @@ type Survey struct {
 	Cases           []*Case
 }
 
+func (s *Survey) GetScore(answer string) int {
+	switch answer {
+	case "Low":
+		return 1
+	case "Medium":
+		return 2
+	case "High":
+		return 3
+	default:
+		return 0
+	}
+}
+
 func (s *Survey) CalculateScore() {
-	// TODO: do this
-	s.SubjectiveScore = 0
+	score := 0
+	score += s.GetScore(s.S1Q1)
+	score += s.GetScore(s.S1Q2)
+	score += s.GetScore(s.S1Q3)
+	score += s.GetScore(s.S1Q4)
+	score += s.GetScore(s.S1Q5)
+	score += s.GetScore(s.S1Q6)
+	score += s.GetScore(s.S1Q7)
+	score += s.GetScore(s.S2Q1)
+	score += s.GetScore(s.S2Q2)
+	score += s.GetScore(s.S2Q3)
+	score += s.GetScore(s.S2Q4)
+	score += s.GetScore(s.S2Q5)
+	score += s.GetScore(s.S2Q6)
+	score += s.GetScore(s.S2Q7)
+	score += s.GetScore(s.S2Q8)
+	score += s.GetScore(s.S2Q9)
+	normalizedScore := (score - 16) * 100 / (37 - 16)
+	s.SubjectiveScore = int32(normalizedScore)
 }
 
 // SurveyInput is the input for section entity
