@@ -1,0 +1,5 @@
+type SurveysConnection {
+    totalCount: Int!
+    edges: [SurveysEdge]
+    pageInfo: PageInfo!
+}

@@ -1,0 +1,4 @@
+type SurveysEdge {
+    cursor: ID!
+    node: Survey
+}
