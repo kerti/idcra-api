@@ -2,6 +2,7 @@ package service
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/kerti/idcra-api/model"
@@ -85,4 +86,51 @@ func (s *SurveyService) TransactionalCreateSurvey(survey *model.Survey) (*model.
 		return nil, err
 	}
 	return s.FindByID(survey.ID)
+}
+
+func (s *SurveyService) List(first *int32, after *string, studentID *string) ([]*model.Survey, error) {
+	surveys := make([]*model.Survey, 0)
+	var fetchSize int32
+	if first == nil {
+		fetchSize = defaultListFetchSize
+	} else {
+		fetchSize = *first
+	}
+
+	strStudentID := "%"
+	if studentID != nil {
+		strStudentID = fmt.Sprintf("%s%s%s", "%", *studentID, "%")
+	}
+
+	if after != nil {
+		surveySQL := `SELECT * FROM surveys WHERE student_id LIKE ? AND created_at > (SELECT created_at FROM surveys WHERE id = ?) ORDER BY created_at ASC LIMIT ?;`
+		decodedIndex, _ := DecodeCursor(after)
+		err := s.db.Select(&surveys, surveySQL, strStudentID, decodedIndex, fetchSize)
+		if err != nil {
+			return nil, err
+		}
+		return surveys, nil
+	}
+	surveySQL := `SELECT * FROM surveys WHERE student_id LIKE ? ORDER BY created_at ASC LIMIT ?;`
+	err := s.db.Select(&surveys, surveySQL, strStudentID, fetchSize)
+	if err != nil {
+		return nil, err
+	}
+	return surveys, nil
+}
+
+func (s *SurveyService) Count(studentID *string) (int, error) {
+	var count int
+
+	strStudentID := "%"
+	if studentID != nil {
+		strStudentID = fmt.Sprintf("%s%s%s", "%", *studentID, "%")
+	}
+
+	surveySQL := `SELECT COUNT(*) FROM surveys WHERE student_id LIKE ?`
+	err := s.db.Get(&count, surveySQL, strStudentID)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }

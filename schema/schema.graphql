@@ -13,6 +13,7 @@ type Query {
     diagnosisAndAction(id: String!): DiagnosisAndAction
     diagnosisAndActions(first: Int, after: String): DiagnosisAndActionsConnection!
     survey(id: String!): Survey
+    surveys(first: Int, after: String, studentID: String): SurveysConnection!
     case(id: String!): Case
 }
 
