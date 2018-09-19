@@ -42,11 +42,13 @@ func (r *Resolver) Students(ctx context.Context, args struct {
 
 	students, err := ctx.Value("studentService").(*service.StudentService).List(args.First, args.After, args.SchoolID, args.Keyword)
 	if err != nil {
+		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
 	}
 
 	count, err := ctx.Value("studentService").(*service.StudentService).Count(args.SchoolID, args.Keyword)
 	if err != nil {
+		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
 	}
 
@@ -60,10 +62,6 @@ func (r *Resolver) Students(ctx context.Context, args struct {
 	}
 
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved total students count by user_id[%s] : %v", *userID, count)
-	if err != nil {
-		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
-		return nil, err
-	}
 
 	if len(students) > 0 {
 		return &studentsConnectionResolver{students: students, totalCount: count, from: &(students[0].ID), to: &(students[len(students)-1].ID)}, nil

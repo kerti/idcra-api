@@ -15,6 +15,7 @@ type Query {
     survey(id: String!): Survey
     surveys(first: Int, after: String, studentID: String): SurveysConnection!
     case(id: String!): Case
+    costBreakdownBySchoolAndDateRange(schoolID: String!, startDate: String!, endDate: String!): [CostReport]
 }
 
 type Mutation {
