@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `diagnosis_and_actions` (
   `id` CHAR(36) NOT NULL,
   `diagnosis` VARCHAR(255) NOT NULL,
   `action` VARCHAR(255) NOT NULL,
+  `unit_cost` DECIMAL(12,2) NOT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `diagnosis_and_actions_idx_1` (`diagnosis`, `action`)
@@ -94,9 +95,10 @@ CREATE TABLE IF NOT EXISTS `diagnosis_and_actions` (
   DEFAULT CHARSET=utf8;
 
 -- DiagnosisAndActions Data
-INSERT INTO `diagnosis_and_actions` (`id`, `diagnosis`, `action`) VALUES
-('4485a2cb-688e-4e0b-bdcf-bcc008c37a69', 'Pit Fissure Dalam', 'Fissure Sealant', NOW()),
-('469d07e4-d71a-4dcb-9932-c805aefff48f', 'Karies Superficial', 'ART', NOW());
+INSERT INTO `diagnosis_and_actions` (`id`, `diagnosis`, `action`, `unit_cost`, `created_at`) VALUES
+('4485a2cb-688e-4e0b-bdcf-bcc008c37a69', 'Pit Fissure Dalam', 'Fissure Sealant', 20331, NOW()),
+('469d07e4-d71a-4dcb-9932-c805aefff48f', 'Karies Superficial', 'ART', 16063, NOW()),
+('018fcc2f-d58b-4ced-a896-f4b4ae29f013', 'Free Karies', 'TAF', 5236, NOW());
 -- ----------------------------------------------------------------------------
 
 -- Surveys Table
