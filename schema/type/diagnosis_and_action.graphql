@@ -2,5 +2,6 @@ type DiagnosisAndAction {
     id: ID!
     diagnosis: String
     action: String
+    unitCost: Float
     createdAt: Time
 }
