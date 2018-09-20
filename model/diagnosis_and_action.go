@@ -5,5 +5,6 @@ type DiagnosisAndAction struct {
 	ID        string
 	Diagnosis string
 	Action    string
-	CreatedAt string `db:"created_at"`
+	UnitCost  float64 `db:"unit_cost"`
+	CreatedAt string  `db:"created_at"`
 }

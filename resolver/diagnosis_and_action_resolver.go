@@ -23,6 +23,10 @@ func (d *diagnosisAndActionResolver) Action() *string {
 	return &d.d.Action
 }
 
+func (d *diagnosisAndActionResolver) UnitCost() *float64 {
+	return &d.d.UnitCost
+}
+
 func (d *diagnosisAndActionResolver) CreatedAt() (*graphql.Time, error) {
 	if d.d.CreatedAt == "" {
 		return nil, nil
