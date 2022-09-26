@@ -66,7 +66,6 @@ func (s *ReportService) CostBreakdownBySchoolAndDateRange(schoolID string, start
 }
 
 func (s *ReportService) GenerateSurveyPDF(surveyID uuid.UUID) (reportData bytes.Buffer, err error) {
-	println(surveyID.String())
 	models := []model.SurveyReport{}
 	reportSQL := `
 		select
@@ -88,13 +87,11 @@ func (s *ReportService) GenerateSurveyPDF(surveyID uuid.UUID) (reportData bytes.
 
 	err = s.db.Select(&models, reportSQL, surveyID)
 	if err != nil {
-		println(err.Error())
 		return *bytes.NewBufferString(""), err
 	}
 	println(fmt.Sprintf("MODEL: %v", models))
 
 	if len(models) != 1 {
-		println("ASU")
 		return *bytes.NewBufferString(""), err
 	}
 
@@ -204,16 +201,12 @@ func getReport(reportModel model.SurveyReport) (reportData bytes.Buffer, err err
 			scaChart, err := getSCAPercentageChart(reportModel.SCAPercentage)
 			if err == nil {
 				m.Base64Image(scaChart, consts.Png)
-			} else {
-				println(err)
 			}
 		})
 		m.Col(8, func() {
 			scaChart, err := getSCADMFChart(reportModel.DValue, reportModel.MValue, reportModel.FValue)
 			if err == nil {
 				m.Base64Image(scaChart, consts.Png)
-			} else {
-				println(err)
 			}
 		})
 	})
@@ -492,7 +485,6 @@ func getSCAPercentageChart(riskPercentage float64) (chartAsBase64 string, err er
 	buffer := bytes.NewBuffer([]byte{})
 	err = graph.Render(chart.PNG, buffer)
 	chartAsBase64 = base64.StdEncoding.EncodeToString(buffer.Bytes())
-	println(chartAsBase64)
 	return
 }
 
@@ -569,6 +561,5 @@ func getSCADMFChart(D, M, F float64) (chartAsBase64 string, err error) {
 	buffer := bytes.NewBuffer([]byte{})
 	err = graph.Render(chart.PNG, buffer)
 	chartAsBase64 = base64.StdEncoding.EncodeToString(buffer.Bytes())
-	println(chartAsBase64)
 	return
 }
