@@ -54,6 +54,8 @@ func main() {
 	loggerHandler := &h.LoggerHandler{DebugMode: config.DebugMode}
 	http.Handle("/query", h.AddContext(ctx, loggerHandler.Logging(h.Authenticate(&h.GraphQL{Schema: graphqlSchema, Loaders: loader.NewLoaderCollection()}))))
 
+	http.Handle("/reports/surveys/", h.AddContext(ctx, loggerHandler.Logging(h.Authenticate(h.SurveyReport()))))
+
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "graphiql.html")
 	}))
